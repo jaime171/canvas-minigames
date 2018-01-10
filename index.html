@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no">
+	<link href="https://fonts.googleapis.com/css?family=Abel|Montserrat:400,700" rel="stylesheet">
+	<title>Minigames</title>
+</head>
+<style type="text/css">
+
+	html {
+		font-family: Montserrat,sans-serif;
+		background: #262b36;
+	}
+
+	h1, h2, p {
+		text-align: center;
+		color: #EFFFE9;
+	}
+
+	canvas {
+    	border:1px solid #d3d3d3;
+    	background-color: #f1f1f1;
+	    margin: 0 auto;
+        display: block;
+	}
+
+	button {
+		display: block;
+		height: 33px;
+		width: 100px;
+		position: absolute;
+		top: 0;
+		left: 50%;
+		margin-left: -50px;
+		border: none;
+		top: 280px;
+		background: #E71D36;
+		color: #EFFFE9;
+		cursor: pointer;
+	}
+
+	p {
+		border-bottom: 2px solid #2e85c5;
+		padding: 10px 0;
+	    width: 300px;
+    	margin: 0 auto;
+	}
+
+	ul {
+		margin: 0;
+		padding: 0;
+		margin: 0 auto;
+		width: 100%;
+		max-width: 600px;
+	}
+
+	canvas {
+		width: 100%;
+		border: 0;
+		margin: 0;
+	}
+
+	.hidden {
+		opacity: 0;
+	}
+
+	.custom-text-color {
+		color: #2e85c5;
+	}
+
+	.custom-color {
+		background: #2e85c5;
+	}
+
+	.sec-color {
+		color: rgb(201, 206, 214);
+	}
+
+	.custom-font {
+		font-family: Abel,sans-serif;
+	}
+
+	#l-games li {
+		list-style: none;
+		cursor: pointer;
+		background: #2e85c5;
+		text-align: center;
+		padding: 10px 0;
+		color: #EFFFE9;
+		margin: 1px 0;
+		transition: opacity .5s;
+		-webkit-transition: opacity .5s;
+	}
+
+	#l-games li:hover {
+		opacity: .7;
+	}
+
+	.l-game-container {
+		margin: 30px 0;
+	}
+
+	.playground{
+		background: red;
+		height: auto;
+		width: 100%;
+		max-width: 500px;
+		margin: 0;
+		margin: 50px auto 100px;
+	}
+
+	.g-info p {
+		width: auto;
+		max-width: 700px
+	}
+
+	.g-info {
+		transition: opacity 1s;
+		-webkit-transition: opacity 1s;
+	}
+
+</style>
+<body>
+	<h1>Old School <span class="custom-text-color custom-font">|</span> Minigames</h1>
+	<p>Old school game made with pure <strong class="sec-color">JavaScript</strong> and <strong class="sec-color">HTML canvas</strong>.</p>
+
+	<div class="l-game-container">
+		<ul id='l-games'></ul>	
+	</div>
+	<div id="gameInfo" class="g-info hidden">
+		<h2 id="gameTitle"></h2>
+		<p id="gameDescription"></p>
+	</div>
+	<div id="playground" class="playground">
+		
+	</div>
+
+	<script type="text/javascript" src="./scripts/games/brick.js"></script>
+	<script type="text/javascript" src="./scripts/games/gameIndex.js"></script>
+	<script type="text/javascript" src="./scripts/main.js"></script>
+</body>
+</html>
