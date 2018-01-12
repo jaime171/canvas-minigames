@@ -2,8 +2,6 @@
 
 function Breakout(canvas, ctx) {
 
-  let gameStart = false;
-
   const _this = this;
   const myGameArea = {
     start: function() {
@@ -17,16 +15,34 @@ function Breakout(canvas, ctx) {
     }
   }
 
+  // --> Public variables
+  this.gameStart = false;
+
+  // --> Instances 
+  const player = new Player({
+    width: 80,
+    height: 15,
+    x: 0,
+    y: 0,
+    color: 'red'
+  });
+
   // --> Public Methods
   this.startGame = function() {
     myGameArea.start();
   }
+
   this.updateGameArea = function() {
-    // console.log('t')
+
+    if(!_this.gameStart)
+      return;
+
+    player.init();
+
   }
 
   // --> Objects
-  this.Text = function(x, y, size, text, color, isCentered) {
+  function Text(x, y, size, text, color, isCentered) {
 
     isCentered = isCentered || true;
 
@@ -40,34 +56,38 @@ function Breakout(canvas, ctx) {
     this.init = function() {
       ctx.font = `${this.size} ${this.font}`;
     }
+  }
+
+  function Player(config) {
+
+    this.width = config.width;
+    this.height = config.height;
+    this.positionX = config.x;
+    this.positionY = config.y;
+
+    this.init = function() {
+      ctx.fillStyle = config.color;
+      ctx.fillRect(this.positionX, this.positionY, this.width, this.height);      
+    }
 
   }
 
 } // --> Brick Obj
 
+//function Player(width, height, color, x, y) {
 
-// function Text(x, y, size, text, color, isCentered) {
+//     this.WIDTH = width;
+//     this.HEIGHT = height;
+//     this.positionX = x;
+//     this.positionY = y;
+    
+//     this.init = function() {
 
-//   isCentered = isCentered || true;
+//       ctx.fillStyle = color;
+//       ctx.fillRect(this.positionX, this.positionY, this.WIDTH, this.HEIGHT);
 
-//   this.positionX = x;
-//   this.positionY = y;
-//   this.font = 'Arial';
-//   this.size = size;
-//   this.text = text;
-//   this.color = color;
-
-//   this.init = function() {
-
-//     var isCenteredValue
-
-//     ctx.font = this.size + ' ' + this.font;
-//     isCenteredValue = isCentered ? this.positionX - (ctx.measureText(this.text).width / 2) : this.positionX;
-//     ctx.fillStyle = this.color;
-//     ctx.fillText(this.text, isCenteredValue, this.positionY);
-
+//     }
 //   }
-// }
 
 //===========================================
 

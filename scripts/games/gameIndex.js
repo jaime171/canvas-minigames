@@ -15,8 +15,6 @@ function GameIndex(gameinfo, playGround, canvas, context) {
 
 			this.game = new Breakout(canvas, context);
 
-      		// Breakout(canvas, context);
-
 		},
 		Pong: function() {
 

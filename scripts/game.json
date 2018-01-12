@@ -1,0 +1,17 @@
+{
+	"Breakout": {
+		"description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys"
+	},
+	"Pong": {
+		"description": "sum is simply dummy text of the printing and typesetting industry."
+	},
+	"Snake": {
+		"description": "sum is simply dummy text of the printing and typesetting industry."
+	},
+	"Pacman": {
+		"description": "sum is simply dummy text of the printing and typesetting industry."
+	},
+	"Asteroids": {
+		"description": "sum is simply dummy text of the printing and typesetting industry."
+	}
+}
