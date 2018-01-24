@@ -36,9 +36,7 @@ function scrollTo(element, time, offset, callback) {
 }
 
 function fadeIn(element, removedClass) {
-
 	element.classList.remove(removedClass);
-
 }
 
 function setGameInfo(game) {
@@ -51,6 +49,10 @@ function setGameInfo(game) {
 
 	gameTitle.innerText = game.name;
 	gameDescription.innerText = game.description;
+}
+
+function validation(validation) {
+	return validation;
 }
 
 // function loadGames(callback) {

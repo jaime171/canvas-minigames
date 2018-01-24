@@ -3,6 +3,47 @@
 function Breakout(canvas, ctx) {
 
   const _this = this;
+
+  // --> Private variables
+  const canvasHeight = canvas.height;
+  const canvasWidth = canvas.width;
+  const allBricks = [];
+
+  const BRICK_WIDTH = 30;
+  const BRICK_HEIGHT = 10;
+  const BRICK_COLOR = 'gray';
+  const MAX_BRICKS_X = 8;
+  const MAX_BRICKS_Y = 4;
+
+  const PLAYER_SPEED = 25
+
+  let leftTrigger, rightTrigger, topTrigger, botomTrigger;
+  let startPressed = false;
+
+  // --> Public variables
+  this.gameStart = false;
+
+  // --> Instances 
+  const player = new Player({
+    width: 60,
+    height: 12,
+    x: canvasWidth / 2 - 60 / 2,
+    y: canvasHeight - 15,
+    color: 'red'
+  });
+  const ball = new Ball({
+    x: canvasWidth / 2,
+    y: canvasHeight / 2,
+    radius: 4,
+    speed_x: 4,
+    speed_y: -4,
+    color: 'lightCoral'
+  });
+  const brick = new Brick({
+    padding: 10 
+  })
+
+  // --> Game Config
   const myGameArea = {
     start: function() {
       this.interval;
@@ -11,34 +52,26 @@ function Breakout(canvas, ctx) {
         this.interval = setInterval(_this.updateGameArea, 20);      
     },
     clear: function() {
-      console.log('clear');
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     }
   }
-
-  // --> Public variables
-  this.gameStart = false;
-
-  // --> Instances 
-  const player = new Player({
-    width: 80,
-    height: 15,
-    x: 0,
-    y: 0,
-    color: 'red'
-  });
 
   // --> Public Methods
   this.startGame = function() {
     myGameArea.start();
+    initBricksObject();
   }
-
   this.updateGameArea = function() {
 
     if(!_this.gameStart)
       return;
 
+    myGameArea.clear();
+
+    ball.updatePosition();
     player.init();
 
+    createBricks();
   }
 
   // --> Objects
@@ -69,25 +102,154 @@ function Breakout(canvas, ctx) {
       ctx.fillStyle = config.color;
       ctx.fillRect(this.positionX, this.positionY, this.width, this.height);      
     }
-
   }
 
-} // --> Brick Obj
+  function Brick(config) {
 
-//function Player(width, height, color, x, y) {
+    this.width = BRICK_WIDTH;
+    this.height = BRICK_HEIGHT;
+    this.positionX = config.x;
+    this.positionY = config.y;
+    this.color = BRICK_COLOR;
+   
+    this.init = function(config) {
+      ctx.fillStyle = this.color;
+      ctx.fillRect(config.x, config.y, this.width, this.height);
+    }
+  }
 
-//     this.WIDTH = width;
-//     this.HEIGHT = height;
-//     this.positionX = x;
-//     this.positionY = y;
+  function Ball(config) {
+
+    this.positionX = config.x;
+    this.positionY = config.y;
+    this.radius = config.radius;
+    this.speed_x = config.speed_x;
+    this.speed_y = config.speed_y;
     
-//     this.init = function() {
+    this.init = function() {
+      ctx.beginPath();
+      ctx.arc(this.positionX, this.positionY, this.radius, 0, 2*Math.PI);
+      ctx.strokeStyle = config.color;
+      ctx.fillStyle = config.color;
+      ctx.stroke();
+      ctx.fill();
+    }
 
-//       ctx.fillStyle = color;
-//       ctx.fillRect(this.positionX, this.positionY, this.WIDTH, this.HEIGHT);
+    this.updatePosition = function() {
 
-//     }
-//   }
+      leftTrigger = this.positionX - this.radius;
+      rightTrigger = this.positionX + this.radius;
+      topTrigger = this.positionY - this.radius;
+      botomTrigger = this.positionY + this.radius;
+
+      const val_1 = validation(rightTrigger >= canvasWidth);
+      const val_2 = validation(botomTrigger >= canvasHeight);
+
+      if (val_1 || leftTrigger <= 0) {
+
+        config.speed_x = -config.speed_x;
+
+      } else if (topTrigger <= 0) {
+
+        config.speed_y = -config.speed_y;
+
+      } else if (val_2) {
+        
+        // --> Remove ball from canvas
+        this.positionY = canvasHeight + this.radius;
+
+        // youLose();
+
+      } else if (botomTrigger >= player.positionY 
+        && rightTrigger >= player.positionX 
+        && leftTrigger <= player.positionX + player.WIDTH) {
+
+        config.speed_y = -config.speed_y;
+
+      } 
+
+      this.positionX += config.speed_x;
+      this.positionY += config.speed_y;
+
+      this.init();
+    }
+  }
+
+  // --> Private methods
+  function initBricksObject() {
+    for (var i = 0; i < MAX_BRICKS_X; i++) {
+      allBricks[i] = [];
+      for (var j = 0; j < MAX_BRICKS_Y; j++) {
+        allBricks[i][j] = {
+          x: 0, 
+          y: 0, 
+          status: true
+        };
+      }
+    }
+  }
+
+  function createBricks() {
+
+    for (var i = 0; i < MAX_BRICKS_X; i++) {
+      for (var j = 0; j < MAX_BRICKS_Y; j++) {
+        if (allBricks[i][j].status) {
+          var brickX = (i*(brick.width + 10)) + 10;
+          var brickY = (j*(brick.height + 10)) + 10;
+
+          allBricks[i][j].x = brickX;
+          allBricks[i][j].y = brickY;
+
+          brick.init({
+            x: brickX,
+            y: brickY
+          });
+
+        }
+      }
+    }
+  }
+
+  // --> Events
+  document.onkeydown = function(e) {
+
+    e = e || window.event;
+
+    // --> Player Movement
+    if (!startPressed) {
+      // --> Left Arrow
+      if (e.keyCode === 37) {
+
+        if (player.positionX < 0) 
+          return;
+
+        player.positionX -= PLAYER_SPEED;
+      // --> Right Arrow
+      } else if (e.keyCode === 39) {
+
+        if (player.positionX + player.width >= canvas.width) 
+          return;
+
+          player.positionX += PLAYER_SPEED;
+        }
+    }
+
+    // --> Pause Game with enter
+    if (e.keyCode === 13) {
+      if(myGameArea.interval) {
+        startPressed = !startPressed;
+
+        if (startPressed) {
+          clearInterval(myGameArea.interval);
+        } else {
+          myGameArea.interval = setInterval(_this.updateGameArea, 20);
+        }
+      }
+    }
+  }
+
+} 
+
 
 //===========================================
 
